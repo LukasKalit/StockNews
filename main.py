@@ -2,17 +2,20 @@ import requests
 import os
 import html
 import smtplib
+from dotenv import load_dotenv
+load_dotenv()
 
 
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
 
-API_KEY_alphavantage = os.environ["API_KEY"]
-API_KEY_news = os.environ["API_KEY_NEWS"]
+API_KEY_alphavantage = os.getenv("API_KEY")
+API_KEY_news = os.getenv("API_KEY_NEWS")
 
-MAIN_MAIL = os.environ["MAIN_MAIL"]
-PASSWORD = os.environ["PASSWORD"]
-DESTINATION_MAIL = os.environ["DESTINATION_MAIL"]
+MAIN_MAIL = os.getenv("MAIN_MAIL")
+PASSWORD = os.getenv("PASSWORD")
+DESTINATION_MAIL = os.getenv("DESTINATION_MAIL")
+
 
 formatted_data = []
 
@@ -60,13 +63,13 @@ before_yesterday_data = float(list_of_data[1]["4. close"])
 rise_fall_data = round(yesterday_data/before_yesterday_data/100, 2)
 
 
-if yesterday_data/before_yesterday_data-1 > 0.05:
+if yesterday_data/before_yesterday_data-1 > 0.00:
     taking_news()
     message = f"Subject:TSLD: 🔺{rise_fall_data}%\n\n{formatted_data}"
     print(message)
     send_info()
 
-elif yesterday_data/before_yesterday_data-1 < -0.05:
+elif yesterday_data/before_yesterday_data-1 < -0.00:
     taking_news()
     message = f"Subject:TSLD: 🔻{rise_fall_data}%\n\n{formatted_data}"
     print(message)
